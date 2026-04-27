@@ -220,7 +220,22 @@ const MarqueeItem = () => (
   </div>
 );
 
-export function Footer() {
+interface FooterLink {
+  label: string;
+  href: string;
+}
+
+interface FooterProps {
+  brandName?: string;
+  brandDescription?: string;
+  navLinks?: FooterLink[];
+  creatorName?: string;
+  creatorUrl?: string;
+  brandIcon?: React.ReactNode;
+  className?: string;
+}
+
+export function Footer(props: FooterProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const giantTextRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -336,7 +351,7 @@ export function Footer() {
                   LinkedIn
                 </MagneticButton>
 
-                <MagneticButton as="a" href="mailto:anshulnautiyal51@gmail.com" className="footer-glass-pill px-10 py-5 rounded-full text-foreground font-bold text-sm md:text-base flex items-center gap-3 group">
+                <MagneticButton as="a" href="mailto:anshulmnautiyal51@gmail.com" className="footer-glass-pill px-10 py-5 rounded-full text-foreground font-bold text-sm md:text-base flex items-center gap-3 group">
                   <Mail className="w-6 h-6 text-muted-foreground group-hover:text-foreground transition-colors" />
                   Email
                 </MagneticButton>
