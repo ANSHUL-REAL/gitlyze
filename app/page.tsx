@@ -2,6 +2,7 @@
 
 import { FormEvent, useRef, useState } from "react";
 import { AlertCircle, ArrowRight, CheckCircle2, Github, Linkedin, Loader2, Mail, Sparkles, X } from "lucide-react";
+import { motion, type Variants } from "motion/react";
 import { AuthModal, AuthStatusButton, useAuthUser } from "@/components/auth-modal";
 import { ContainerScroll } from "@/components/container-scroll";
 import DotPattern from "@/components/dot-pattern";
@@ -50,6 +51,37 @@ interface AnalysisResult {
   warnings: string[];
 }
 
+const pageLoadContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.18,
+      staggerChildren: 0.16,
+    },
+  },
+};
+
+const pageLoadItem: Variants = {
+  hidden: { y: 24, opacity: 0, filter: "blur(8px)" },
+  visible: {
+    y: 0,
+    opacity: 1,
+    filter: "blur(0px)",
+    transition: { duration: 0.62, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const headerLoad: Variants = {
+  hidden: { y: -24, opacity: 0, scale: 0.98 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
   const [repoUrl, setRepoUrl] = useState("");
@@ -92,7 +124,12 @@ export default function Home() {
         <DotPattern className="opacity-25 [mask-image:radial-gradient(circle_at_center,black,transparent_72%)]" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
 
-        <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between">
+        <motion.nav
+          variants={headerLoad}
+          initial="hidden"
+          animate="visible"
+          className="relative z-10 mx-auto flex max-w-7xl items-center justify-between"
+        >
           <GitlyzeLogo showWordmark />
           <div className="flex items-center gap-2">
             <button
@@ -113,15 +150,20 @@ export default function Home() {
               Public repos
             </a>
           </div>
-        </nav>
+        </motion.nav>
 
-        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 pt-20 lg:grid-cols-[1fr_440px] lg:pt-28">
-          <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-sm text-accent">
+        <motion.div
+          variants={pageLoadContainer}
+          initial="hidden"
+          animate="visible"
+          className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 pt-20 lg:grid-cols-[1fr_440px] lg:pt-28"
+        >
+          <motion.div variants={pageLoadContainer}>
+            <motion.div variants={pageLoadItem} className="mb-5 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/10 px-3 py-1 text-sm text-accent">
               <Sparkles className="size-4" />
               Static analysis + real-world insights (no expensive AI required)
-            </div>
-            <h1 className="max-w-5xl text-balance text-5xl font-black leading-[0.95] tracking-normal sm:text-7xl lg:text-8xl">
+            </motion.div>
+            <motion.h1 variants={pageLoadItem} className="max-w-5xl text-balance text-5xl font-black leading-[0.95] tracking-normal sm:text-7xl lg:text-8xl">
               <TextCursorProximity
                 label="Review code like a senior engineer - instantly."
                 containerRef={heroRef}
@@ -134,12 +176,13 @@ export default function Home() {
                   fontWeight: { from: 850, to: 950 },
                 }}
               />
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+            </motion.h1>
+            <motion.p variants={pageLoadItem} className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
               Paste any public GitHub repo and get a structured review: issues, risks, quality score, and real-world best practices.
-            </p>
+            </motion.p>
 
-            <form
+            <motion.form
+              variants={pageLoadItem}
               onSubmit={analyze}
               className="mt-8 flex max-w-3xl flex-col gap-3 rounded-2xl border border-border bg-panel/80 p-3 shadow-glow backdrop-blur sm:flex-row"
             >
@@ -162,10 +205,10 @@ export default function Home() {
                 Analyze Repository
                 {!isLoading ? <ArrowRight className="size-4" /> : null}
               </button>
-            </form>
-            <p className="mt-3 text-sm font-medium text-muted-foreground">
+            </motion.form>
+            <motion.p variants={pageLoadItem} className="mt-3 text-sm font-medium text-muted-foreground">
               No API keys. No setup. Just paste and analyze.
-            </p>
+            </motion.p>
 
             {error && (
               <div className="mt-4 flex max-w-3xl items-center gap-2 rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-100">
@@ -173,8 +216,9 @@ export default function Home() {
                 {error}
               </div>
             )}
-          </div>
+          </motion.div>
 
+          <motion.div variants={pageLoadItem}>
           <GlowCard customSize glowColor="green" className="rounded-3xl p-5">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold text-muted-foreground">Live Analysis Status</span>
@@ -200,7 +244,8 @@ export default function Home() {
               ))}
             </div>
           </GlowCard>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
 
       <section className="relative z-10 px-4 py-10 sm:px-6 lg:px-8">
