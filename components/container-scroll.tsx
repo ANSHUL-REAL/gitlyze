@@ -26,7 +26,7 @@ export function ContainerScroll({
   const translate = useTransform(scrollYProgress, [0, 1], [0, isMobile ? 0 : -80]);
 
   return (
-    <div ref={containerRef} className="relative flex min-h-[44rem] items-center justify-center px-4 py-16 md:min-h-[68rem] md:px-20">
+    <div ref={containerRef} className="relative mx-auto flex min-h-[44rem] max-w-7xl items-center justify-center px-0 py-16 md:min-h-[68rem] md:px-20">
       <div className="relative w-full py-8 md:py-32" style={{ perspective: "1000px" }}>
         <Header translate={translate} titleComponent={titleComponent} />
         <ScrollCard rotate={rotate} scale={scale}>

@@ -202,8 +202,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="relative z-10 px-4 py-10 sm:px-6 lg:px-8">
         <WorkflowBlock result={result} />
+      </section>
+
+      <section className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         {result ? <Results result={result} /> : <EmptyState />}
       </section>
 
