@@ -8,6 +8,7 @@ interface Review {
   author: string;
   role: string;
   testimonial: string;
+  avatar: string;
 }
 
 const reviews: Review[] = [
@@ -17,20 +18,23 @@ const reviews: Review[] = [
     role: "Frontend Developer",
     testimonial:
       "Gitlyze caught unused handlers and console logs I missed before pushing. The structured fixes made the cleanup obvious.",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
   },
   {
-    id: 24,
+    id: 14,
     author: "Karan Mehta",
     role: "Indie Hacker",
     testimonial:
       "The score was useful, but the real value was seeing risky patterns grouped by file. It helped me prioritize what to fix first.",
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
   },
   {
-    id: 38,
+    id: 32,
     author: "Maya Iyer",
     role: "CS Student",
     testimonial:
       "I used it on a class project and found ignored files plus missing globals. The report explained why those issues mattered.",
+    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
   },
 ];
 
@@ -118,7 +122,7 @@ function TestimonialCard({
       }`}
     >
       <img
-        src={`https://i.pravatar.cc/128?img=${review.id}`}
+        src={review.avatar}
         alt={`Avatar of ${review.author}`}
         className="pointer-events-none mx-auto h-24 w-24 rounded-full border border-accent/30 bg-background object-cover shadow-[0_0_34px_rgba(45,225,160,0.18)]"
       />
