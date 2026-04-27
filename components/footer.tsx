@@ -167,8 +167,7 @@ export function Footer({
   });
   const giantY = useTransform(scrollYProgress, [0, 1], [120, 0]);
   const giantScale = useTransform(scrollYProgress, [0, 1], [0.84, 1]);
-  const contentY = useTransform(scrollYProgress, [0.15, 1], [70, 0]);
-  const contentOpacity = useTransform(scrollYProgress, [0.15, 0.65], [0, 1]);
+  const contentY = useTransform(scrollYProgress, [0.15, 1], [36, 0]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -181,7 +180,7 @@ export function Footer({
       style={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
     >
       <style dangerouslySetInnerHTML={{ __html: footerStyles }} />
-      <footer className="gitlyze-footer-shell fixed bottom-0 left-0 flex h-screen w-full flex-col justify-between overflow-hidden border-t border-border bg-background text-foreground">
+      <footer className="gitlyze-footer-shell fixed bottom-0 left-0 flex h-[100svh] w-full flex-col justify-between overflow-hidden border-t border-border bg-background text-foreground">
         <LiquidFooterEffect />
         <div className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-[64vh] w-[84vw] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[radial-gradient(circle,rgba(45,225,160,0.18),rgba(16,185,129,0.12)_42%,transparent_70%)] blur-[82px] gitlyze-footer-aurora" />
 
@@ -192,7 +191,7 @@ export function Footer({
           {brandName.toUpperCase()}
         </motion.div>
 
-        <div className="absolute left-0 top-12 z-10 w-full -rotate-2 scale-110 overflow-hidden border-y border-accent/15 bg-background/55 py-4 shadow-2xl backdrop-blur-md">
+        <div className="absolute left-0 top-6 z-10 w-full -rotate-2 scale-110 overflow-hidden border-y border-accent/15 bg-background/55 py-3 shadow-2xl backdrop-blur-md md:top-12 md:py-4">
           <div className="gitlyze-footer-marquee flex w-max text-xs font-black uppercase tracking-[0.28em] text-muted-foreground md:text-sm">
             <MarqueeRow />
             <MarqueeRow />
@@ -200,24 +199,24 @@ export function Footer({
         </div>
 
         <motion.div
-          style={{ y: contentY, opacity: contentOpacity }}
-          className="relative z-20 mx-auto mt-20 flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-6 text-center"
+          style={{ y: contentY }}
+          className="relative z-20 mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center px-5 pb-32 pt-20 text-center md:mt-20 md:px-6 md:pb-28 md:pt-20"
         >
-          <div className="mb-8 flex items-center justify-center rounded-3xl border border-accent/20 bg-background/72 p-4 shadow-[0_0_80px_rgba(45,225,160,0.14)] backdrop-blur-md">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-accent/12 via-panel/90 to-background shadow-[inset_0_0_26px_rgba(45,225,160,0.10)] md:h-20 md:w-20">
+          <div className="mb-3 flex items-center justify-center rounded-3xl border border-accent/20 bg-background/72 p-3 shadow-[0_0_80px_rgba(45,225,160,0.14)] backdrop-blur-md md:mb-8 md:p-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-accent/12 via-panel/90 to-background shadow-[inset_0_0_26px_rgba(45,225,160,0.10)] md:h-20 md:w-20">
               {brandIcon || <NotepadTextDashed className="h-10 w-10 text-accent" />}
             </div>
           </div>
 
-          <p className="text-sm font-black uppercase tracking-[0.35em] text-accent">Ready when you are</p>
-          <h2 className="gitlyze-footer-title mt-4 max-w-4xl text-5xl font-black tracking-normal md:text-8xl">
+          <p className="text-xs font-black uppercase tracking-[0.28em] text-accent md:text-sm md:tracking-[0.35em]">Ready when you are</p>
+          <h2 className="gitlyze-footer-title mt-2 max-w-4xl text-3xl font-black tracking-normal sm:text-5xl md:mt-4 md:text-8xl">
             Review better code.
           </h2>
-          <p className="mt-6 max-w-2xl text-base font-semibold leading-7 text-muted-foreground md:text-lg">
+          <p className="mt-3 max-w-md text-sm font-semibold leading-6 text-muted-foreground md:mt-6 md:max-w-2xl md:text-lg md:leading-7">
             {brandDescription}
           </p>
 
-          <div className="mt-9 flex flex-wrap justify-center gap-3">
+          <div className="mt-5 flex flex-wrap justify-center gap-2.5 md:mt-9 md:gap-3">
             <MagneticPill href="https://github.com/ANSHUL-REAL">
               <Github className="size-4" />
               GitHub
@@ -232,7 +231,7 @@ export function Footer({
             </MagneticPill>
           </div>
 
-          <div className="mt-5">
+          <div className="mt-3 md:mt-5">
             <SocialIcons />
           </div>
 
@@ -247,18 +246,18 @@ export function Footer({
           )}
         </motion.div>
 
-        <div className="relative z-30 flex w-full flex-col items-center justify-between gap-5 px-6 pb-8 text-center md:flex-row md:px-12">
-          <p className="order-2 text-xs font-bold uppercase tracking-[0.22em] text-muted-foreground md:order-1">
+        <div className="absolute inset-x-0 bottom-0 z-30 flex w-full flex-col items-center justify-between gap-3 bg-background/90 px-6 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 text-center shadow-[0_-28px_70px_rgba(6,11,9,0.92)] backdrop-blur-md md:flex-row md:gap-5 md:bg-gradient-to-t md:from-background md:via-background/92 md:to-transparent md:px-12 md:pb-8 md:pt-8">
+          <p className="order-2 text-xs font-black uppercase tracking-[0.18em] text-foreground/80 md:order-1 md:tracking-[0.22em]">
             (c) {new Date().getFullYear()} {brandName}. All rights reserved.
           </p>
 
-          <div className="gitlyze-footer-pill order-1 rounded-full px-6 py-3 text-xs font-black uppercase tracking-[0.18em] text-muted-foreground md:order-2">
+          <div className="gitlyze-footer-pill order-1 rounded-full px-6 py-3 text-xs font-black uppercase tracking-[0.18em] text-foreground/80 md:order-2">
             {creatorName && creatorUrl ? (
               <Link href={creatorUrl} target="_blank" className="transition hover:text-foreground">
                 Built by {creatorName}
               </Link>
             ) : (
-              <span>Built by ANSHUL-REAL</span>
+              <span>Team Gitlyze</span>
             )}
           </div>
 

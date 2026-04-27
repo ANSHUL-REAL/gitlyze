@@ -66,6 +66,8 @@ const SKIPPED_PARTS = [
   "coverage/",
   "vendor/",
 ];
+const ANALYZED_JS_EXTENSIONS = [".js", ".jsx", ".mjs", ".cjs"];
+const TYPESCRIPT_EXTENSIONS = [".ts", ".tsx", ".mts", ".cts"];
 
 export function parseGitHubUrl(input: string) {
   let url: URL;
@@ -95,9 +97,21 @@ export async function analyzeRepository(repoUrl: string): Promise<AnalysisResult
   const repoName = `${parsed.owner}/${parsed.repo}`;
   const warnings: string[] = [];
   const { branch, tree } = await fetchRepoTree(parsed.owner, parsed.repo);
+  const blobItems = tree.filter((item) => item.type === "blob");
+  const allPaths = blobItems.map((item) => item.path);
+  const typeScriptFileCount = allPaths.filter((path) => TYPESCRIPT_EXTENSIONS.some((extension) => path.endsWith(extension))).length;
+  const typeScriptScopeWarning =
+    typeScriptFileCount > 0
+      ? `TypeScript files detected (${typeScriptFileCount}); the current analyzer reviews JavaScript, JSX, MJS, and CJS files only.`
+      : "";
+
+  if (typeScriptScopeWarning) {
+    warnings.push(typeScriptScopeWarning);
+  }
+
   const jsItems = tree
     .filter((item) => item.type === "blob")
-    .filter((item) => item.path.endsWith(".js") || item.path.endsWith(".jsx"))
+    .filter((item) => ANALYZED_JS_EXTENSIONS.some((extension) => item.path.endsWith(extension)))
     .filter((item) => !item.path.endsWith(".min.js"))
     .filter((item) => !SKIPPED_PARTS.some((part) => item.path.includes(part)))
     .filter((item) => (item.size ?? 0) <= MAX_FILE_SIZE)
@@ -108,10 +122,13 @@ export async function analyzeRepository(repoUrl: string): Promise<AnalysisResult
       summary: {
         repo: repoName,
         branch,
-        totalFiles: tree.filter((item) => item.type === "blob").length,
+        totalFiles: blobItems.length,
         analyzedFiles: 0,
-        stack: detectStack(tree.map((item) => item.path)),
-        observations: ["No JavaScript files were found for the current analyzer."],
+        stack: detectStack(allPaths),
+        observations: [
+          "No JavaScript files were found for the current analyzer.",
+          ...(typeScriptScopeWarning ? [typeScriptScopeWarning] : []),
+        ],
       },
       score: 100,
       counts: { errors: 0, warnings: 0, issueTypes: 0 },
@@ -120,11 +137,14 @@ export async function analyzeRepository(repoUrl: string): Promise<AnalysisResult
     };
   }
 
-  if (tree.filter((item) => item.type === "blob").length > MAX_FILES) {
+  if (blobItems.length > MAX_FILES) {
     warnings.push(`Repository has more than ${MAX_FILES} files; analyzed the first ${jsItems.length} JavaScript files.`);
   }
 
   const files = await fetchFiles(parsed.owner, parsed.repo, branch, jsItems);
+  if (files.length < jsItems.length) {
+    warnings.push(`Could not download ${jsItems.length - files.length} JavaScript file${jsItems.length - files.length === 1 ? "" : "s"} from GitHub.`);
+  }
   const lintIssues = await lintFiles(files);
   const insights = await fetchInsightsForIssues(lintIssues, warnings);
   const issues = lintIssues.map((issue, index) => {
@@ -146,10 +166,13 @@ export async function analyzeRepository(repoUrl: string): Promise<AnalysisResult
     summary: {
       repo: repoName,
       branch,
-      totalFiles: tree.filter((item) => item.type === "blob").length,
+      totalFiles: blobItems.length,
       analyzedFiles: files.length,
-      stack: detectStack(tree.map((item) => item.path)),
-      observations: buildObservations(files, issues),
+      stack: detectStack(allPaths),
+      observations: [
+        ...buildObservations(files, issues),
+        ...(typeScriptScopeWarning ? [typeScriptScopeWarning] : []),
+      ],
     },
     score: calculateScore(errors, warningCount, files.length),
     counts: { errors, warnings: warningCount, issueTypes },
