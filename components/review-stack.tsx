@@ -8,7 +8,7 @@ interface Review {
   author: string;
   role: string;
   testimonial: string;
-  avatar: string;
+  initials: string;
 }
 
 const reviews: Review[] = [
@@ -18,7 +18,7 @@ const reviews: Review[] = [
     role: "Frontend Developer",
     testimonial:
       "Gitlyze caught unused handlers and console logs I missed before pushing. The structured fixes made the cleanup obvious.",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    initials: "RS",
   },
   {
     id: 14,
@@ -26,7 +26,7 @@ const reviews: Review[] = [
     role: "Indie Hacker",
     testimonial:
       "The score was useful, but the real value was seeing risky patterns grouped by file. It helped me prioritize what to fix first.",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    initials: "KM",
   },
   {
     id: 32,
@@ -34,7 +34,15 @@ const reviews: Review[] = [
     role: "CS Student",
     testimonial:
       "I used it on a class project and found ignored files plus missing globals. The report explained why those issues mattered.",
-    avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+    initials: "MI",
+  },
+  {
+    id: 41,
+    author: "Arjun Verma",
+    role: "Backend Developer",
+    testimonial:
+      "It surfaced complexity and missing definitions in a service repo quickly. The report was easier to act on than a raw lint log.",
+    initials: "AV",
   },
 ];
 
@@ -50,7 +58,7 @@ export function ReviewStack() {
     });
   };
 
-  const positions: CardPosition[] = ["front", "middle", "back"];
+  const positions: CardPosition[] = ["front", "middle", "back", "back"];
 
   return (
     <section className="relative z-10 mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -121,11 +129,12 @@ function TestimonialCard({
         isFront ? "cursor-grab active:cursor-grabbing" : ""
       }`}
     >
-      <img
-        src={review.avatar}
-        alt={`Avatar of ${review.author}`}
-        className="pointer-events-none mx-auto h-24 w-24 rounded-full border border-accent/30 bg-background object-cover shadow-[0_0_34px_rgba(45,225,160,0.18)]"
-      />
+      <div
+        aria-label={`Avatar initials for ${review.author}`}
+        className="pointer-events-none mx-auto flex h-24 w-24 items-center justify-center rounded-full border border-accent/30 bg-gradient-to-br from-accent/90 via-emerald-400/70 to-background text-2xl font-black text-background shadow-[0_0_34px_rgba(45,225,160,0.18)]"
+      >
+        {review.initials}
+      </div>
       <p className="text-center text-lg font-medium leading-8 text-foreground">
         &quot;{review.testimonial}&quot;
       </p>
