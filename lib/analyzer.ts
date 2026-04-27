@@ -416,7 +416,7 @@ function buildSuggestion(ruleId: string, problem: string) {
 
 function fallbackInsight(ruleId: string, problem: string) {
   return {
-    explanation: `${ruleId} points to code that may be harder to maintain, test, or ship safely. Static analysis caught it without needing an AI model.`,
+    explanation: `Static analysis reported ${ruleId}. This explanation is based on the ESLint rule and the exact lint message from the repository.`,
     suggestion: buildSuggestion(ruleId, problem),
     references: [],
   };

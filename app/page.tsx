@@ -3,7 +3,6 @@
 import { FormEvent, useRef, useState } from "react";
 import { AlertCircle, ArrowRight, CheckCircle2, Github, Linkedin, Loader2, Mail, Sparkles, X } from "lucide-react";
 import { AuthModal, AuthStatusButton, useAuthUser } from "@/components/auth-modal";
-import { ContainerScroll } from "@/components/container-scroll";
 import DotPattern from "@/components/dot-pattern";
 import { Footer } from "@/components/footer";
 import { GitlyzeLogo } from "@/components/gitlyze-logo";
@@ -176,7 +175,7 @@ export default function Home() {
 
           <GlowCard customSize glowColor="green" className="rounded-3xl p-5">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-muted-foreground">Live Analysis Preview</span>
+              <span className="text-sm font-semibold text-muted-foreground">Live Analysis Status</span>
               <span className="rounded-full border border-accent/25 bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
                 Live
               </span>
@@ -202,66 +201,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ContainerScroll
-        titleComponent={
-          <div className="mx-auto max-w-3xl px-4">
-            <h2 className="mt-3 text-balance text-4xl font-black tracking-normal text-foreground md:text-6xl">
-              See your code through a reviewer&apos;s lens.
-            </h2>
-            <p className="mt-4 text-muted-foreground">
-              Every issue is explained, prioritized, and paired with actionable fixes - not just warnings.
-            </p>
-          </div>
-        }
-      >
-        <div className="grid h-full gap-4 overflow-auto p-4 md:grid-cols-[280px_1fr]">
-          <div className="space-y-4">
-            <GlowCard customSize glowColor="blue" className="min-h-40 rounded-2xl">
-              <p className="text-xs font-bold uppercase text-accent">Score</p>
-              <div className="mt-4 text-6xl font-black">{result ? result.score : "--"}</div>
-              <p className="mt-2 text-sm text-muted-foreground">Quality score updates after analysis.</p>
-            </GlowCard>
-            <GlowCard customSize glowColor="purple" className="min-h-40 rounded-2xl">
-              <p className="text-xs font-bold uppercase text-accent">Signals</p>
-              <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <span className="rounded-xl bg-background/70 p-3">{result ? result.counts.errors : "--"} errors</span>
-                <span className="rounded-xl bg-background/70 p-3">{result ? result.counts.warnings : "--"} warnings</span>
-              </div>
-            </GlowCard>
-          </div>
-          <GlowCard customSize glowColor="green" className="min-h-full rounded-2xl">
-            <p className="text-xs font-bold uppercase text-accent">Finding preview</p>
-            <div className="mt-5 space-y-4">
-              {!result && (
-                <div className="rounded-2xl border border-border bg-background/65 p-5">
-                  <h3 className="font-bold">Run an analysis to preview findings.</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    This panel will show real issues from the repository you submit.
-                  </p>
-                </div>
-              )}
-
-              {result?.issues.slice(0, 4).map((issue) => (
-                <div key={issue.id} className="rounded-2xl border border-border bg-background/65 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-bold text-amber-100">
-                      {issue.severity}
-                    </span>
-                    <span className="text-xs text-muted-foreground">{issue.ruleId}</span>
-                  </div>
-                  <h3 className="mt-3 font-bold">{issue.problem}</h3>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {issue.filePath}:{issue.line}:{issue.column}
-                  </p>
-                  <p className="mt-3 text-sm leading-6 text-muted-foreground">{issue.suggestion}</p>
-                </div>
-              ))}
-            </div>
-          </GlowCard>
-        </div>
-      </ContainerScroll>
-
-      <section className="relative z-10 mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+      <section className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         {result ? <Results result={result} /> : <EmptyState />}
       </section>
 
