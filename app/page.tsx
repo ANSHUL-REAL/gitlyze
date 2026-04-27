@@ -8,6 +8,7 @@ import DotPattern from "@/components/dot-pattern";
 import { Footer } from "@/components/footer";
 import { GitlyzeLogo } from "@/components/gitlyze-logo";
 import { GlowCard } from "@/components/glow-card";
+import { ReviewStack } from "@/components/review-stack";
 import TextCursorProximity from "@/components/text-cursor-proximity";
 
 interface SourceReference {
@@ -209,6 +210,8 @@ export default function Home() {
       <section className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         {result ? <Results result={result} /> : <EmptyState />}
       </section>
+
+      <ReviewStack />
 
       <Footer
         brandName="gitlyze"
