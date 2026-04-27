@@ -85,7 +85,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen overflow-hidden bg-background text-foreground">
+    <main className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <section ref={heroRef} className="relative isolate min-h-[92vh] px-4 py-6 sm:px-6 lg:px-8">
         <DotPattern className="opacity-25 [mask-image:radial-gradient(circle_at_center,black,transparent_72%)]" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
@@ -210,9 +210,7 @@ export default function Home() {
         brandDescription="Hybrid code review powered by static analysis and real-world developer knowledge. Built for developers who care about clean, production-ready code."
         brandIcon={<GitlyzeLogo markClassName="h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16" />}
         navLinks={[
-          { label: "Analyzer", href: "#results" },
           { label: "GitHub", href: "https://github.com/ANSHUL-REAL" },
-          { label: "LinkedIn", href: "https://www.linkedin.com/in/anshul-nautiyal-42760236b/" },
         ]}
       />
 
@@ -302,6 +300,8 @@ function EmptyState() {
 }
 
 function Results({ result }: { result: AnalysisResult }) {
+  const summary = buildQuickSummary(result);
+
   return (
     <div id="results" className="space-y-5">
       <div className="mb-6">
@@ -313,6 +313,35 @@ function Results({ result }: { result: AnalysisResult }) {
           Clear signals, grouped issues, suggested fixes, and trusted references - all in one place.
         </p>
       </div>
+
+      <GlowCard customSize glowColor="purple" className="rounded-3xl p-6">
+        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase text-accent">Quick Summary</p>
+            <h3 className="mt-2 text-2xl font-black tracking-normal text-foreground">
+              {summary.headline}
+            </h3>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
+              {summary.description}
+            </p>
+          </div>
+          <div className="grid min-w-56 grid-cols-3 gap-2 text-center text-xs text-muted-foreground">
+            <span className="rounded-2xl border border-border bg-background/70 p-3">
+              <strong className="block text-lg text-foreground">{result.summary.analyzedFiles}</strong>
+              files
+            </span>
+            <span className="rounded-2xl border border-border bg-background/70 p-3">
+              <strong className="block text-lg text-foreground">{result.counts.issueTypes}</strong>
+              issue types
+            </span>
+            <span className="rounded-2xl border border-border bg-background/70 p-3">
+              <strong className="block text-lg text-foreground">{result.score}</strong>
+              score
+            </span>
+          </div>
+        </div>
+      </GlowCard>
+
       <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
         <GlowCard customSize glowColor="blue" className="rounded-3xl p-6">
           <p className="text-sm font-semibold uppercase text-accent">{result.summary.repo}</p>
@@ -357,46 +386,106 @@ function Results({ result }: { result: AnalysisResult }) {
 
           <div className="mt-5 space-y-4">
             {result.issues.slice(0, 20).map((issue) => (
-              <article key={issue.id} className="rounded-2xl border border-border bg-background/70 p-4">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <span
-                      className={`rounded-full px-2.5 py-1 text-xs font-bold ${
-                        issue.severity === "error" ? "bg-red-500/15 text-red-100" : "bg-amber-500/15 text-amber-100"
-                      }`}
-                    >
-                      {issue.severity}
-                    </span>
-                    <h3 className="mt-3 font-bold text-foreground">{issue.problem}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {issue.filePath}:{issue.line}:{issue.column} - {issue.ruleId}
-                    </p>
-                  </div>
-                </div>
-                <p className="mt-4 text-sm leading-6 text-muted-foreground">{issue.explanation}</p>
-                <div className="mt-4 rounded-xl border border-accent/20 bg-accent/10 p-3 text-sm text-foreground">
-                  {issue.suggestion}
-                </div>
-                {issue.references.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {issue.references.map((reference) => (
-                      <a
-                        key={reference.url}
-                        href={reference.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground transition hover:border-accent/50 hover:text-foreground"
-                      >
-                        {reference.title}
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </article>
+              <IssueCard key={issue.id} issue={issue} />
             ))}
           </div>
         </GlowCard>
       </div>
     </div>
   );
+}
+
+function IssueCard({ issue }: { issue: ReviewIssue }) {
+  const details = formatIssueDetails(issue);
+
+  return (
+    <article className="rounded-2xl border border-border bg-background/70 p-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <span
+            className={`rounded-full px-2.5 py-1 text-xs font-bold ${
+              issue.severity === "error" ? "bg-red-500/15 text-red-100" : "bg-amber-500/15 text-amber-100"
+            }`}
+          >
+            {issue.severity}
+          </span>
+          <h3 className="mt-3 font-bold text-foreground">{details.title}</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {issue.filePath}:{issue.line}:{issue.column} - {issue.ruleId}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-3 md:grid-cols-3">
+        <ReviewBlock label="Problem" text={details.problem} />
+        <ReviewBlock label="Why it matters" text={details.why} />
+        <ReviewBlock label="Fix" text={details.fix} />
+      </div>
+
+      {issue.references.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {issue.references.map((reference) => (
+            <a
+              key={reference.url}
+              href={reference.url}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground transition hover:border-accent/50 hover:text-foreground"
+            >
+              {reference.title}
+            </a>
+          ))}
+        </div>
+      )}
+    </article>
+  );
+}
+
+function ReviewBlock({ label, text }: { label: string; text: string }) {
+  return (
+    <div className="rounded-2xl border border-border bg-panel/60 p-3">
+      <p className="text-xs font-bold uppercase text-accent">{label}</p>
+      <p className="mt-2 text-sm leading-6 text-muted-foreground">{text}</p>
+    </div>
+  );
+}
+
+function formatIssueDetails(issue: ReviewIssue) {
+  return {
+    title: humanizeRule(issue.ruleId, issue.problem),
+    problem: trimSentence(issue.problem, 140),
+    why: trimSentence(issue.explanation, 180),
+    fix: trimSentence(issue.suggestion.split(" Example: ")[0], 180),
+  };
+}
+
+function humanizeRule(ruleId: string, problem: string) {
+  if (ruleId === "no-console") return "Debug output left in code";
+  if (ruleId === "no-unused-vars") return "Unused code reducing clarity";
+  if (ruleId === "no-undef") return "Missing variable or global definition";
+  if (ruleId === "complexity") return "Function is doing too much";
+  return problem.replace(/\.$/, "");
+}
+
+function trimSentence(value: string, maxLength: number) {
+  const cleaned = value.replace(/\s+/g, " ").trim();
+  if (cleaned.length <= maxLength) return cleaned;
+  return `${cleaned.slice(0, maxLength - 1).trim()}...`;
+}
+
+function buildQuickSummary(result: AnalysisResult) {
+  const stack = result.summary.stack.length > 0 ? result.summary.stack.join(", ") : "JavaScript";
+  const topObservation = result.summary.observations.find((item) => item.startsWith("Most frequent issue type"));
+  const severity =
+    result.counts.errors > 0
+      ? `${result.counts.errors} critical issue${result.counts.errors === 1 ? "" : "s"}`
+      : `${result.counts.warnings} warning${result.counts.warnings === 1 ? "" : "s"}`;
+
+  return {
+    headline: `${stack} project reviewed across ${result.summary.analyzedFiles} files.`,
+    description:
+      result.issues.length === 0
+        ? "No ESLint issues were found in the analyzed files. The repository looks clean within the current JavaScript analysis scope."
+        : `The scan found ${severity} and ${result.counts.issueTypes} issue type${result.counts.issueTypes === 1 ? "" : "s"}. ${topObservation ?? "Review the grouped findings below to prioritize fixes."}`,
+  };
 }

@@ -92,7 +92,7 @@ export function GlowCard({
     backgroundPosition: "50% 50%",
     border: "var(--border-size) solid var(--backup-border)",
     position: "relative",
-    touchAction: "none",
+    touchAction: "pan-y",
     width: typeof width === "number" ? `${width}px` : width,
     height: typeof height === "number" ? `${height}px` : height,
   };

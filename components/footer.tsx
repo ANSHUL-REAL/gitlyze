@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { NotepadTextDashed } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { LiquidFooterEffect } from "@/components/liquid-footer-effect";
 import { SocialIcons } from "@/components/social-icons";
 
 interface FooterLink {
@@ -33,6 +34,7 @@ export function Footer({
   return (
     <section className={cn("relative mt-8 w-full overflow-hidden", className)}>
       <footer className="relative mt-20 border-t border-border bg-background">
+        <LiquidFooterEffect />
         <div className="relative mx-auto flex min-h-[30rem] max-w-7xl flex-col items-center p-4 py-12 sm:min-h-[35rem] md:min-h-[40rem]">
           <div className="flex w-full flex-col">
             <div className="flex w-full flex-col items-center">
