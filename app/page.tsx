@@ -51,7 +51,7 @@ interface AnalysisResult {
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const [repoUrl, setRepoUrl] = useState("https://github.com/expressjs/express");
+  const [repoUrl, setRepoUrl] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -178,7 +178,7 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold text-muted-foreground">Live Analysis Preview</span>
               <span className="rounded-full border border-accent/25 bg-accent/10 px-3 py-1 text-xs font-bold text-accent">
-                MVP
+                Live
               </span>
             </div>
             <div className="mt-7 grid grid-cols-3 gap-3">
@@ -218,48 +218,30 @@ export default function Home() {
           <div className="space-y-4">
             <GlowCard customSize glowColor="blue" className="min-h-40 rounded-2xl">
               <p className="text-xs font-bold uppercase text-accent">Score</p>
-              <div className="mt-4 text-6xl font-black">{result?.score ?? 92}</div>
+              <div className="mt-4 text-6xl font-black">{result ? result.score : "--"}</div>
               <p className="mt-2 text-sm text-muted-foreground">Quality score updates after analysis.</p>
             </GlowCard>
             <GlowCard customSize glowColor="purple" className="min-h-40 rounded-2xl">
               <p className="text-xs font-bold uppercase text-accent">Signals</p>
               <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <span className="rounded-xl bg-background/70 p-3">{result?.counts.errors ?? 0} errors</span>
-                <span className="rounded-xl bg-background/70 p-3">{result?.counts.warnings ?? 0} warnings</span>
+                <span className="rounded-xl bg-background/70 p-3">{result ? result.counts.errors : "--"} errors</span>
+                <span className="rounded-xl bg-background/70 p-3">{result ? result.counts.warnings : "--"} warnings</span>
               </div>
             </GlowCard>
           </div>
           <GlowCard customSize glowColor="green" className="min-h-full rounded-2xl">
             <p className="text-xs font-bold uppercase text-accent">Finding preview</p>
             <div className="mt-5 space-y-4">
-              {(result?.issues.slice(0, 4) ?? [
-                {
-                  id: "preview-1",
-                  severity: "warning",
-                  problem: "Debug code left in production",
-                  filePath: "src/api/review.js",
-                  line: 24,
-                  column: 7,
-                  ruleId: "no-console",
-                  explanation: "Console output is useful while developing, but production code should use intentional logging or remove debug traces.",
-                  suggestion: "Replace the call with structured logging or remove it before shipping.",
-                  references: [],
-                  query: "",
-                },
-                {
-                  id: "preview-2",
-                  severity: "warning",
-                  problem: "Unused variable affecting clarity",
-                  filePath: "src/analyzer.js",
-                  line: 48,
-                  column: 12,
-                  ruleId: "no-unused-vars",
-                  explanation: "Unused bindings add noise and can hide incomplete refactors.",
-                  suggestion: "Remove the variable or wire it into the intended behavior.",
-                  references: [],
-                  query: "",
-                },
-              ]).map((issue) => (
+              {!result && (
+                <div className="rounded-2xl border border-border bg-background/65 p-5">
+                  <h3 className="font-bold">Run an analysis to preview findings.</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    This panel will show real issues from the repository you submit.
+                  </p>
+                </div>
+              )}
+
+              {result?.issues.slice(0, 4).map((issue) => (
                 <div key={issue.id} className="rounded-2xl border border-border bg-background/65 p-4">
                   <div className="flex items-center justify-between gap-3">
                     <span className="rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-bold text-amber-100">

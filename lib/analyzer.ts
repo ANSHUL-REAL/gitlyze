@@ -111,7 +111,7 @@ export async function analyzeRepository(repoUrl: string): Promise<AnalysisResult
         totalFiles: tree.filter((item) => item.type === "blob").length,
         analyzedFiles: 0,
         stack: detectStack(tree.map((item) => item.path)),
-        observations: ["No JavaScript files were found for the MVP analyzer."],
+        observations: ["No JavaScript files were found for the current analyzer."],
       },
       score: 100,
       counts: { errors: 0, warnings: 0, issueTypes: 0 },
