@@ -1,67 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-
-declare global {
-  interface Window {
-    __gitlyzeLiquidApp?: {
-      dispose?: () => void;
-      loadImage?: (url: string) => void;
-      setRain?: (enabled: boolean) => void;
-      liquidPlane?: {
-        material: {
-          metalness: number;
-          roughness: number;
-        };
-        uniforms: {
-          displacementScale: {
-            value: number;
-          };
-        };
-      };
-    };
-  }
-}
-
 export function LiquidFooterEffect() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    if (!canvasRef.current) return;
-
-    const script = document.createElement("script");
-    script.type = "module";
-    script.textContent = `
-      import LiquidBackground from 'https://cdn.jsdelivr.net/npm/threejs-components@0.0.22/build/backgrounds/liquid1.min.js';
-
-      const canvas = document.getElementById('gitlyze-liquid-footer');
-      if (canvas) {
-        const app = LiquidBackground(canvas);
-        app.loadImage('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/enhanced_8bfe61b0-d431-433a-8acb-49d508bf88b4-image-vWzKFKS7vQy7s8wfQYzEpaoiYaVMkr.png');
-        app.liquidPlane.material.metalness = 0.75;
-        app.liquidPlane.material.roughness = 0.25;
-        app.liquidPlane.uniforms.displacementScale.value = 4;
-        app.setRain(false);
-        window.__gitlyzeLiquidApp = app;
-      }
-    `;
-
-    document.body.appendChild(script);
-
-    return () => {
-      window.__gitlyzeLiquidApp?.dispose?.();
-      document.body.removeChild(script);
-    };
-  }, []);
-
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-30 [mask-image:linear-gradient(to_bottom,transparent,black_22%,black_76%,transparent)]">
-      <canvas
-        ref={canvasRef}
-        id="gitlyze-liquid-footer"
-        className="absolute inset-0 h-full w-full"
-        aria-hidden="true"
-      />
+    <div className="pointer-events-none absolute inset-0 overflow-hidden opacity-90">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(45,225,160,0.18),transparent_34rem),linear-gradient(180deg,transparent,rgba(7,16,13,0.92))]" />
+      <div className="absolute -left-24 top-16 h-72 w-[42rem] rotate-[-10deg] rounded-[45%] bg-accent/12 blur-3xl" />
+      <div className="absolute -right-28 bottom-24 h-80 w-[48rem] rotate-[12deg] rounded-[45%] bg-emerald-300/10 blur-3xl" />
+      <div className="absolute left-1/2 top-1/2 h-[34rem] w-[70rem] -translate-x-1/2 -translate-y-1/2 rounded-[48%] border border-accent/10 bg-[linear-gradient(135deg,rgba(45,225,160,0.10),rgba(4,12,10,0.05),rgba(45,225,160,0.08))] blur-sm" />
+      <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-background via-background/70 to-transparent" />
     </div>
   );
 }

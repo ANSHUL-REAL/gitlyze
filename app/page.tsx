@@ -3,6 +3,7 @@
 import { FormEvent, useRef, useState } from "react";
 import { AlertCircle, ArrowRight, CheckCircle2, Github, Linkedin, Loader2, Mail, Sparkles, X } from "lucide-react";
 import { AuthModal, AuthStatusButton, useAuthUser } from "@/components/auth-modal";
+import { ContainerScroll } from "@/components/container-scroll";
 import DotPattern from "@/components/dot-pattern";
 import { Footer } from "@/components/footer";
 import { GitlyzeLogo } from "@/components/gitlyze-logo";
@@ -202,6 +203,7 @@ export default function Home() {
       </section>
 
       <section className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <WorkflowBlock result={result} />
         {result ? <Results result={result} /> : <EmptyState />}
       </section>
 
@@ -296,6 +298,73 @@ function EmptyState() {
       </p>
       </div>
     </GlowCard>
+  );
+}
+
+function WorkflowBlock({ result }: { result: AnalysisResult | null }) {
+  const steps = [
+    {
+      title: "Repository structure",
+      value: result ? `${result.summary.totalFiles} files scanned` : "Waiting for repository",
+    },
+    {
+      title: "Static analysis",
+      value: result ? `${result.summary.analyzedFiles} JavaScript files analyzed` : "Runs after submit",
+    },
+    {
+      title: "Review report",
+      value: result ? `${result.issues.length} findings prepared` : "No report generated yet",
+    },
+  ];
+
+  return (
+    <ContainerScroll
+      titleComponent={
+        <div className="mx-auto max-w-3xl">
+          <p className="text-sm font-semibold uppercase text-accent">Review workflow</p>
+          <h2 className="mt-3 text-balance text-4xl font-black tracking-normal md:text-6xl">
+            See the analysis pipeline before the full report.
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            Gitlyze turns repository data into a structured review only after a real scan completes.
+          </p>
+        </div>
+      }
+    >
+      <div className="grid h-full gap-4 md:grid-cols-[280px_1fr]">
+        <div className="space-y-4">
+          <GlowCard customSize glowColor="blue" className="rounded-2xl p-5">
+            <p className="text-xs font-bold uppercase text-accent">Quality Score</p>
+            <div className="mt-4 text-6xl font-black">{result ? result.score : "--"}</div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {result ? "Calculated from real lint findings." : "Available after analysis."}
+            </p>
+          </GlowCard>
+          <GlowCard customSize glowColor="purple" className="rounded-2xl p-5">
+            <p className="text-xs font-bold uppercase text-accent">Signals</p>
+            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <span className="rounded-xl bg-background/70 p-3">{result ? result.counts.errors : "--"} errors</span>
+              <span className="rounded-xl bg-background/70 p-3">{result ? result.counts.warnings : "--"} warnings</span>
+            </div>
+          </GlowCard>
+        </div>
+
+        <GlowCard customSize glowColor="green" className="rounded-2xl p-5">
+          <p className="text-xs font-bold uppercase text-accent">Pipeline status</p>
+          <div className="mt-5 space-y-4">
+            {steps.map((step) => (
+              <div key={step.title} className="flex items-start gap-3 rounded-2xl border border-border bg-background/65 p-4">
+                <CheckCircle2 className="mt-0.5 size-5 shrink-0 text-accent" />
+                <div>
+                  <h3 className="font-bold text-foreground">{step.title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{step.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </GlowCard>
+      </div>
+    </ContainerScroll>
   );
 }
 
