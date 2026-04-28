@@ -1,27 +1,30 @@
 # Gitlyze
 
-Gitlyze is a web-based code review tool for public GitHub repositories. It combines static analysis, quality scoring, and source-backed best-practice insights to help developers understand code quality quickly.
+Gitlyze is a web app that reviews public GitHub repositories and turns the results into a cleaner report.
 
-## Overview
+I built it to answer a simple question: "Can I paste a repo URL and get useful code quality feedback without setting up a full local toolchain first?"
 
-Paste a public GitHub repository URL and Gitlyze will fetch the repository structure, analyze JavaScript files, surface issues, and present a structured review with actionable suggestions.
+The current version focuses on JavaScript repositories. It pulls the repo tree from GitHub, downloads supported source files, runs ESLint-based checks, scores the results, and adds source-backed explanations for common issues.
 
-The goal is simple: make code review feedback feel clear, practical, and senior-engineer level without requiring expensive AI model APIs.
+## What it does
 
-## Features
+- accepts a public GitHub repository URL
+- fetches the repository tree and supported source files
+- analyzes JavaScript, JSX, MJS, and CJS files
+- groups lint findings into a readable review
+- calculates a simple quality score from errors, warnings, and issue density
+- adds external references for repeated issue types
+- includes Supabase auth flow for sign in and sign up
 
-- Public GitHub repository input
-- JavaScript and JSX file analysis
-- ESLint-powered static analysis
-- Quality score from errors, warnings, and issue density
-- Repo summary with file counts, branch, stack hints, and observations
-- Issue cards with severity, file location, explanation, suggested fix, and references
-- Source-backed insight enrichment using Exa
-- Supabase-ready sign in and sign up modal
-- Premium interactive UI with cursor effects, glow cards, and scroll preview
-- Contact modal with email and LinkedIn links
+## Why it feels useful
 
-## Tech Stack
+Most code quality tools are either too raw or too noisy for a quick first pass. Gitlyze tries to sit in the middle:
+
+- more structured than raw lint output
+- lighter than a full hosted code review platform
+- easier to demo on a public repo URL
+
+## Tech stack
 
 - Next.js 15
 - React 19
@@ -30,41 +33,47 @@ The goal is simple: make code review feedback feel clear, practical, and senior-
 - ESLint
 - Exa Search API
 - Supabase Auth
-- Motion
-- Lucide React
 
-## How It Works
+## How it works
 
-1. User enters a public GitHub repository URL.
-2. Gitlyze parses the owner and repository name.
-3. The backend fetches the repository tree from GitHub.
-4. JavaScript and JSX files are downloaded and filtered.
-5. ESLint runs against the fetched source code.
-6. Issues are normalized by file, line, severity, and rule.
-7. Repeated issue types are deduplicated for insight lookup.
-8. Exa enriches issue types with best-practice explanations and references.
-9. Gitlyze returns a quality score, repo summary, and structured issue list.
+1. Parse the GitHub repository URL
+2. Read the repository metadata and file tree from GitHub
+3. Filter to supported source files
+4. Run ESLint against downloaded file contents
+5. Normalize issues into a review-friendly structure
+6. Deduplicate recurring issue types
+7. Fetch supporting references for common problems
+8. Return a summary, score, warnings, and issue list
 
-## Environment Variables
+## Current scope
 
-Create a `.env.local` file in the project root.
+This project is intentionally narrow right now.
+
+- JavaScript-first analysis
+- public GitHub repositories only
+- no local repo upload flow
+- no saved review history yet
+
+TypeScript files are detected, but they are currently reported as out of scope instead of being fully analyzed.
+
+## Environment variables
+
+Create a `.env.local` file in the project root:
 
 ```env
 EXA_API_KEY=your_exa_api_key
 GITHUB_TOKEN=
-
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
 ```
 
-### Notes
+Notes:
 
-- `EXA_API_KEY` is used for source-backed insight enrichment.
-- `GITHUB_TOKEN` is optional, but it can improve GitHub API rate limits.
-- Supabase values are required for sign in and sign up.
-- `.env.local` is ignored by Git and should not be committed.
+- `EXA_API_KEY` powers the source-backed explanation layer
+- `GITHUB_TOKEN` is optional, but helps with rate limits
+- Supabase keys are required for auth
 
-## Getting Started
+## Local development
 
 Install dependencies:
 
@@ -72,7 +81,7 @@ Install dependencies:
 npm install
 ```
 
-Run the development server:
+Run the app:
 
 ```bash
 npm run dev
@@ -80,7 +89,7 @@ npm run dev
 
 Open:
 
-```bash
+```text
 http://127.0.0.1:3000
 ```
 
@@ -88,56 +97,35 @@ Build for production:
 
 ```bash
 npm run build
-```
-
-Start production server:
-
-```bash
 npm run start
 ```
 
-## Supabase Setup
-
-1. Create a Supabase project.
-2. Enable Email/Password authentication.
-3. Copy the project URL and publishable key.
-4. Add them to `.env.local`.
-5. Restart the dev server.
-
-The app uses Supabase SSR helpers and middleware to keep sessions refreshed.
-
-## Project Structure
+## Project structure
 
 ```text
 app/
-  api/analyze/route.ts      API route for repository analysis
-  page.tsx                  Main Gitlyze interface
+  api/analyze/route.ts      Repository analysis API route
+  page.tsx                  Main interface
 components/
-  auth-modal.tsx            Sign in and sign up modal
-  glow-card.tsx             Interactive glow card surface
-  footer.tsx                Footer and social links
-  gitlyze-logo.tsx          Custom Gitlyze logo and wordmark
+  auth-modal.tsx            Sign in and sign up UI
+  glow-card.tsx             Interactive card surface
+  gitlyze-logo.tsx          Branding component
 lib/
-  analyzer.ts               GitHub fetch, ESLint, scoring, and insight logic
+  analyzer.ts               GitHub fetch, linting, scoring, and insights
 utils/supabase/
-  client.ts                 Browser Supabase client
-  server.ts                 Server Supabase client
-  middleware.ts             Session refresh helper
-middleware.ts               Next.js middleware for Supabase sessions
+  client.ts                 Browser client
+  server.ts                 Server client
+middleware.ts               Session refresh
 ```
 
-## Current Scope
+## What I would improve next
 
-Gitlyze currently focuses on JavaScript and JSX repositories. It is designed as an MVP and can be extended later with:
-
-- TypeScript analysis
-- Multi-language support
-- Pull request comments
-- Saved review history
-- Team workspaces
-- Exportable reports
-- More advanced rule configuration
+- TypeScript-aware analysis
+- support for more languages
+- pull request review mode
+- saved reports
+- comparison between repo revisions
 
 ## Author
 
-Built by [ANSHUL-REAL](https://github.com/ANSHUL-REAL).
+Built by [ANSHUL-REAL](https://github.com/ANSHUL-REAL)
