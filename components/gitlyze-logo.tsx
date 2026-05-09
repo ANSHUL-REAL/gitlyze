@@ -15,7 +15,7 @@ export function GitlyzeLogo({
         viewBox="0 0 120 120"
         role="img"
         aria-label="Gitlyze logo"
-        className={cn("h-10 w-10 shrink-0 drop-shadow-[0_0_18px_rgba(45,225,160,0.36)] sm:h-11 sm:w-11", markClassName)}
+        className={cn("h-10 w-10 shrink-0 sm:h-11 sm:w-11", markClassName)}
       >
         <defs>
           <linearGradient id="gitlyze-mark" x1="18" y1="10" x2="102" y2="112" gradientUnits="userSpaceOnUse">
@@ -32,7 +32,7 @@ export function GitlyzeLogo({
       </svg>
 
       {showWordmark && (
-        <span className="hidden bg-gradient-to-r from-white via-white to-accent bg-clip-text text-3xl font-black leading-none tracking-normal text-transparent drop-shadow-[0_0_18px_rgba(45,225,160,0.22)] min-[420px]:inline sm:text-[2rem]">
+        <span className="hidden bg-gradient-to-r from-white via-white to-accent bg-clip-text text-3xl font-black leading-none tracking-normal text-transparent min-[420px]:inline sm:text-[2rem]">
           gitlyze
         </span>
       )}

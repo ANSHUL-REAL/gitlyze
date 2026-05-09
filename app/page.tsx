@@ -72,16 +72,6 @@ const pageLoadItem: Variants = {
   },
 };
 
-const headerLoad: Variants = {
-  hidden: { y: -24, opacity: 0, scale: 0.98 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
   const [repoUrl, setRepoUrl] = useState("");
@@ -124,12 +114,7 @@ export default function Home() {
         <DotPattern className="opacity-25 [mask-image:radial-gradient(circle_at_center,black,transparent_72%)]" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
 
-        <motion.nav
-          variants={headerLoad}
-          initial="hidden"
-          animate="visible"
-          className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-3"
-        >
+        <nav className="relative z-10 mx-auto flex min-h-10 max-w-7xl items-center justify-between gap-3">
           <GitlyzeLogo showWordmark className="shrink min-w-0" />
           <div className="flex min-w-0 shrink-0 items-center justify-end gap-1.5 sm:gap-2">
             <button
@@ -151,7 +136,7 @@ export default function Home() {
               <span className="hidden sm:inline">Public repos</span>
             </a>
           </div>
-        </motion.nav>
+        </nav>
 
         <motion.div
           variants={pageLoadContainer}

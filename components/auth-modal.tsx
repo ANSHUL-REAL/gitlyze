@@ -394,7 +394,7 @@ export function AuthStatusButton({
       <button
         type="button"
         onClick={() => signOutCurrentUser()}
-        className="hidden items-center gap-2 rounded-full border border-border bg-panel/80 px-4 py-2 text-sm text-muted-foreground transition hover:border-accent/50 hover:text-foreground sm:inline-flex"
+        className="hidden min-w-[92px] items-center justify-center gap-2 whitespace-nowrap rounded-full border border-border bg-panel/80 px-4 py-2 text-sm text-muted-foreground transition hover:border-accent/50 hover:text-foreground sm:inline-flex"
       >
         <LogOut className="size-4" />
         Sign out
@@ -406,7 +406,7 @@ export function AuthStatusButton({
     <button
       type="button"
       onClick={onOpen}
-      className="inline-flex items-center gap-2 rounded-full border border-border bg-panel/80 px-4 py-2 text-sm text-muted-foreground transition hover:border-accent/50 hover:text-foreground"
+      className="inline-flex min-w-[92px] items-center justify-center gap-2 whitespace-nowrap rounded-full border border-border bg-panel/80 px-4 py-2 text-sm text-muted-foreground transition hover:border-accent/50 hover:text-foreground"
     >
       <Lock className="size-4" />
       Sign in
