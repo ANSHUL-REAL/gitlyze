@@ -128,14 +128,14 @@ export default function Home() {
           variants={headerLoad}
           initial="hidden"
           animate="visible"
-          className="relative z-10 mx-auto flex max-w-7xl items-center justify-between"
+          className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-3"
         >
-          <GitlyzeLogo showWordmark />
-          <div className="flex items-center gap-2">
+          <GitlyzeLogo showWordmark className="shrink min-w-0" />
+          <div className="flex min-w-0 shrink-0 items-center justify-end gap-1.5 sm:gap-2">
             <button
               type="button"
               onClick={() => setIsContactOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent transition hover:border-accent/50 hover:bg-accent/15"
+              className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent/10 px-3 py-2 text-sm font-semibold text-accent transition hover:border-accent/50 hover:bg-accent/15 sm:px-4"
             >
               Contact
             </button>
@@ -144,10 +144,11 @@ export default function Home() {
               href="https://github.com"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-panel/80 px-4 py-2 text-sm text-muted-foreground transition hover:border-accent/50 hover:text-foreground"
+              aria-label="Public GitHub repositories"
+              className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-panel/80 text-sm text-muted-foreground transition hover:border-accent/50 hover:text-foreground sm:size-auto sm:gap-2 sm:px-4 sm:py-2"
             >
-              <Github className="size-4" />
-              Public repos
+              <Github className="size-4 shrink-0" />
+              <span className="hidden sm:inline">Public repos</span>
             </a>
           </div>
         </motion.nav>

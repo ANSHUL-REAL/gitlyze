@@ -10,12 +10,12 @@ export function GitlyzeLogo({
   showWordmark?: boolean;
 }) {
   return (
-    <div aria-label="gitlyze" className={cn("flex items-center gap-3", className)}>
+    <div aria-label="gitlyze" className={cn("flex min-w-0 items-center gap-2 sm:gap-3", className)}>
       <svg
         viewBox="0 0 120 120"
         role="img"
         aria-label="Gitlyze logo"
-        className={cn("h-11 w-11 drop-shadow-[0_0_18px_rgba(45,225,160,0.36)]", markClassName)}
+        className={cn("h-10 w-10 shrink-0 drop-shadow-[0_0_18px_rgba(45,225,160,0.36)] sm:h-11 sm:w-11", markClassName)}
       >
         <defs>
           <linearGradient id="gitlyze-mark" x1="18" y1="10" x2="102" y2="112" gradientUnits="userSpaceOnUse">
@@ -32,32 +32,9 @@ export function GitlyzeLogo({
       </svg>
 
       {showWordmark && (
-        <svg
-          viewBox="0 0 360 88"
-          role="img"
-          aria-label="gitlyze"
-          className="h-10 w-[164px] drop-shadow-[0_0_18px_rgba(45,225,160,0.22)]"
-        >
-          <defs>
-            <linearGradient id="gitlyze-word" x1="0" y1="0" x2="360" y2="88" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor="#ffffff" />
-              <stop offset="0.42" stopColor="#ffffff" />
-              <stop offset="0.56" stopColor="#38edaf" />
-              <stop offset="1" stopColor="#21d498" />
-            </linearGradient>
-          </defs>
-          <text
-            x="0"
-            y="67"
-            fill="url(#gitlyze-word)"
-            fontFamily="Inter, ui-sans-serif, system-ui, sans-serif"
-            fontSize="80"
-            fontWeight="800"
-            letterSpacing="2"
-          >
-            gitlyze
-          </text>
-        </svg>
+        <span className="hidden bg-gradient-to-r from-white via-white to-accent bg-clip-text text-3xl font-black leading-none tracking-normal text-transparent drop-shadow-[0_0_18px_rgba(45,225,160,0.22)] min-[420px]:inline sm:text-[2rem]">
+          gitlyze
+        </span>
       )}
     </div>
   );
