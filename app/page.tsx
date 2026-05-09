@@ -120,7 +120,7 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setIsContactOpen(true)}
-              className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent/10 px-3 py-2 text-sm font-semibold text-accent transition hover:border-accent/50 hover:bg-accent/15 sm:px-4"
+              className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-accent/25 bg-accent/10 px-3 text-sm font-semibold text-accent sm:px-4"
             >
               Contact
             </button>
@@ -130,7 +130,7 @@ export default function Home() {
               target="_blank"
               rel="noreferrer"
               aria-label="Public GitHub repositories"
-              className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-panel/80 text-sm text-muted-foreground transition hover:border-accent/50 hover:text-foreground sm:size-auto sm:gap-2 sm:px-4 sm:py-2"
+              className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-panel/80 text-sm text-muted-foreground sm:w-[132px] sm:gap-2 sm:px-4"
             >
               <Github className="size-4 shrink-0" />
               <span className="hidden sm:inline">Public repos</span>
@@ -158,8 +158,6 @@ export default function Home() {
                 className="inline"
                 styles={{
                   color: { from: "hsl(var(--foreground))", to: "hsl(var(--accent))" },
-                  scale: { from: 1, to: 1.08 },
-                  fontWeight: { from: 850, to: 950 },
                 }}
               />
             </motion.h1>

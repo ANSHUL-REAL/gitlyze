@@ -32,8 +32,8 @@ export function GitlyzeLogo({
       </svg>
 
       {showWordmark && (
-        <span className="hidden bg-gradient-to-r from-white via-white to-accent bg-clip-text text-3xl font-black leading-none tracking-normal text-transparent min-[420px]:inline sm:text-[2rem]">
-          gitlyze
+        <span className="hidden text-3xl font-black leading-none tracking-normal text-foreground min-[420px]:inline sm:text-[2rem]">
+          git<span className="text-accent">lyze</span>
         </span>
       )}
     </div>
